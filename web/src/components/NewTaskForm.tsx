@@ -22,7 +22,7 @@ export default function NewTaskForm() {
 
   return (
     <form
-      className="w-full flex flex-col mt-6 text-white"
+      className="w-full flex flex-col mt-6 text-white rounded-lg"
       onSubmit={createNewHabit}
     >
       <label htmlFor="title" className="text-lg mb-1">

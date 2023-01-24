@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Task from "./components/Task";
@@ -20,19 +21,34 @@ function App() {
       },
     });
 
-    setTasks(tasks.filter((task) => task.id !== id))
+    setTasks(tasks.filter((task) => task.id !== id));
   }
 
+  async function handleTaskToggle(id: string) {
+    await api.patch(`/${id}/toggle`)
+    await api.get("/task").then((res) => setTasks(res.data));
+  }
+  
   useEffect(() => {
     api.get("/task").then((res) => setTasks(res.data));
   }, []);
 
   return (
-    <div className="h-screen w-screen bg-background flex flex-col gap-3 justify-center items-center">
+    <div className={clsx("h-screen w-full py-20 bg-background flex flex-col gap-3 justify-center items-center", {
+      "h-full": tasks.length > 5
+    })}>
       <Header />
-      <div className="text-white w-1/4 px-3 mt-3 flex flex-col gap-3">
+      <div className="text-white md:w-1/4 mt-3 flex flex-col gap-3">
         {tasks.map((task) => (
-          <Task key={task.id} id={task.id} title={task.title} description={task.description} onTaskDelete={handleTaskDelete}/>
+          <Task
+            key={task.id}
+            id={task.id}
+            title={task.title}
+            description={task.description}
+            onTaskDelete={handleTaskDelete}
+            onTaskCompleteToggle={handleTaskToggle}
+            isCompleted={task.completed}
+          />
         ))}
       </div>
     </div>
