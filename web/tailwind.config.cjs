@@ -7,7 +7,9 @@ module.exports = {
   theme: {
     extend: {
       backgroundColor: {
-        "background": "#1f002c"
+        "background": "#1F002C",
+        "task-background": "#67039D",
+        "task-background-hover": "#7F13BA"
       }
     },
   },
