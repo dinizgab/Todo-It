@@ -14,8 +14,8 @@ export default function Task({ title, description }: TaskProps) {
       </div>
 
       <div className="flex gap-5 mr-3">
-        <Check size={32} color="#1DDC46"/>
-        <Trash size={32} color="#EB2020"/>
+        <Check size={32} />
+        <Trash size={32} />
       </div>
     </div>
   );
