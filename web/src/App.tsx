@@ -38,7 +38,7 @@ function App() {
       "h-full": tasks.length > 5
     })}>
       <Header />
-      <div className="text-white md:w-1/4 mt-3 flex flex-col gap-3">
+      <div className="text-white w-3/4 lg:w-1/4 mt-3 flex flex-col gap-3">
         {tasks.map((task) => (
           <Task
             key={task.id}

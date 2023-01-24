@@ -4,7 +4,7 @@ import NewTaskForm from "./NewTaskForm";
 
 export default function Header() {
   return (
-    <div className="text-white w-1/4 flex flex-row justify-between items-center">
+    <div className="text-white w-3/4 lg:w-1/4 flex flex-row justify-between items-center">
       <h1 className="text-3xl font-semibold">TaskList</h1>
 
       <Dialog.Root>
