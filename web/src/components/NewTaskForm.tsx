@@ -1,5 +1,5 @@
 import { Check } from "phosphor-react";
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { api } from "../lib/axios";
 
 export default function NewTaskForm() {
