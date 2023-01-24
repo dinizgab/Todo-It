@@ -8,8 +8,6 @@ module.exports = {
     extend: {
       backgroundColor: {
         "background": "#1F002C",
-        "task-background": "#67039D",
-        "task-background-hover": "#7F13BA"
       }
     },
   },

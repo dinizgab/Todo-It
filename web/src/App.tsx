@@ -23,7 +23,7 @@ function App() {
       <Header />
       <div className="text-white w-1/4 px-3 mt-3 flex flex-col gap-3">
         {tasks.map((task) => (
-          <Task key={task.id} title={task.title} description={task.description} />
+          <Task key={task.id} id={task.id} title={task.title} description={task.description} />
         ))}
       </div>
     </div>
