@@ -71,9 +71,20 @@ export async function appRoutes(app: FastifyInstance) {
       user: z.string(),
       email: z.string(),
       password: z.string(),
-    })
-  })
-  
+    });
+
+    const { user, email, password } = userRegisterInfos.parse(request.body);
+
+    const hashedPassword = await app.bcrypt.hash(password);
+
+    await prisma.user.create({
+      data: {
+        user,
+        email,
+        password: hashedPassword,
+      },
+    });
+  });
 }
 
 //// Post a habit

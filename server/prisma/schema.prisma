@@ -23,4 +23,7 @@ model User {
   id    String @id @default(uuid())
   user  String
   email String
+  password String
+
+  @@map("user")
 }
