@@ -1,10 +1,31 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App'
-import './index.css'
+import React from "react";
+import ReactDOM from "react-dom/client";
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
+import "./index.css";
+import HomeScreen from "./screens/HomeScreen";
+import LoginScreen from "./screens/LoginScreen";
+import RegisterScreen from "./screens/RegisterScreen";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <LoginScreen />,
+  },
+  {
+    path: "/register",
+    element: <RegisterScreen />
+  },
+  {
+    // TODO - Página protegida por autenticação JWT
+    path: "/home",
+    element: <HomeScreen />,
+  },
+]);
+
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
+    <RouterProvider router={router} />
+  </React.StrictMode>
+);

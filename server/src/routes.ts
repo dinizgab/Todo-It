@@ -3,7 +3,7 @@ import { FastifyInstance } from "fastify";
 import { z } from "zod";
 
 export async function appRoutes(app: FastifyInstance) {
-  app.get("/task", async (request) => {
+  app.get("/home", async (request) => {
     const savedTasks = await prisma.task.findMany();
     return savedTasks;
   });
@@ -65,9 +65,20 @@ export async function appRoutes(app: FastifyInstance) {
       },
     });
   });
+
+  app.post("/register", async (request) => {
+    const userRegisterInfos = z.object({
+      user: z.string(),
+      email: z.string(),
+      password: z.string(),
+    })
+  })
+  
 }
 
 //// Post a habit
 //// Get all habits to list them
 //// Patch a specific habit (Toggle if is completed or not)
 //// Delete a task
+// TODO - Login de usuário
+// TODO - Cadastro de usuário

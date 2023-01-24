@@ -1,8 +1,9 @@
 import clsx from "clsx";
 import { useEffect, useState } from "react";
-import Header from "./components/Header";
-import Task from "./components/Task";
-import { api } from "./lib/axios";
+
+import Header from "../components/Header";
+import Task from "../components/Task";
+import { api } from "../lib/axios";
 
 type Task = {
   id: string;
@@ -11,7 +12,7 @@ type Task = {
   completed: boolean;
 };
 
-function App() {
+export default function HomeScreen() {
   const [tasks, setTasks] = useState<Task[]>([]);
 
   async function handleTaskDelete(id: string) {
@@ -25,18 +26,23 @@ function App() {
   }
 
   async function handleTaskToggle(id: string) {
-    await api.patch(`/${id}/toggle`)
-    await api.get("/task").then((res) => setTasks(res.data));
+    await api.patch(`/${id}/toggle`);
+    await api.get("/home").then((res) => setTasks(res.data));
   }
-  
+
   useEffect(() => {
-    api.get("/task").then((res) => setTasks(res.data));
+    api.get("/home").then((res) => setTasks(res.data));
   }, []);
 
   return (
-    <div className={clsx("h-screen w-full py-20 bg-background flex flex-col gap-3 justify-center items-center", {
-      "h-full": tasks.length > 5
-    })}>
+    <div
+      className={clsx(
+        "h-screen w-full py-20 bg-background flex flex-col gap-3 justify-center items-center",
+        {
+          "h-full": tasks.length > 5,
+        }
+      )}
+    >
       <Header />
       <div className="text-white w-3/4 lg:w-1/4 mt-3 flex flex-col gap-3">
         {tasks.map((task) => (
@@ -54,5 +60,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
