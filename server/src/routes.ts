@@ -1,7 +1,6 @@
-import { prisma } from "./lib/prisma";
+import { z } from "zod";
 import { FastifyInstance } from "fastify";
-import { isValid, z } from "zod";
-import { REPL_MODE_SLOPPY } from "repl";
+import { getAllUsers, loginUser, registerUser } from "./handlers/user.handlers";
 
 export async function appRoutes(app: FastifyInstance) {
   app.get("/home", async (request) => {
@@ -67,59 +66,12 @@ export async function appRoutes(app: FastifyInstance) {
     });
   });
 
-  app.get("/users", async (request) => {
-    const users = await prisma.user.findMany({})
-    return users
-  })
+  // ROTAS DE USUÁRIOS
+  app.get("/users", async (request) => getAllUsers(request));
 
-  app.post("/login", async (request, reply) => {
-    const loginUserInfos = z.object({
-      username: z.string(),
-      password: z.string(),
-    });
+  app.post("/login", async (request, reply) => loginUser(app, request, reply));
 
-    const { username, password } = loginUserInfos.parse(request.body);
-
-    const user = await prisma.user.findFirst({
-      where: {
-        user: username,
-      },
-    });
-
-    let isValidLogin = false;
-
-    if (user) {
-      isValidLogin = await app.bcrypt.compare(password, user.password);
-    } else {
-      reply.code(404).send({ message: "Usuario nao encontrado" });
-    }
-
-    if (isValidLogin) {
-      reply.code(200).send({ message: "Usuario logado: ", username });
-    } else {
-      reply.code(401).send({ message: "Usuario ou senha incorretos" });
-    }
-  });
-
-  app.post("/register", async (request) => {
-    const userRegisterInfos = z.object({
-      user: z.string(),
-      email: z.string(),
-      password: z.string(),
-    });
-
-    const { user, email, password } = userRegisterInfos.parse(request.body);
-
-    const hashedPassword = await app.bcrypt.hash(password);
-
-    await prisma.user.create({
-      data: {
-        user,
-        email,
-        password: hashedPassword,
-      },
-    });
-  });
+  app.post("/register", async (request, reply) => registerUser(app, request, reply));
 }
 
 ///// TODO - Post a habit
@@ -128,3 +80,5 @@ export async function appRoutes(app: FastifyInstance) {
 ///// TODO - Delete a task
 // TODO - Login de usuário
 ///// TODO - Cadastro de usuário
+// TODO - Autorização do usuário com JWT quando se registrar o usuário
+// TODO - Autorização do usuário com JWT

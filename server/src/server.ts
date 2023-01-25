@@ -2,13 +2,17 @@ import fastify from "fastify";
 
 import cors from "@fastify/cors";
 import bcrypt from "fastify-bcrypt";
-import { appRoutes } from "./routes";
+import fastifyJwt from "@fastify/jwt";
 
+import { appRoutes } from "./routes";
 
 const app = fastify();
 
 app.register(cors);
 app.register(bcrypt);
+app.register(fastifyJwt, {
+  secret: process.env.JWT_SECRET!,
+});
 
 app.register(appRoutes);
 
