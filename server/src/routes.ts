@@ -1,7 +1,11 @@
-import { z } from "zod";
 import { FastifyInstance } from "fastify";
-import { getAllUsers, loginUser, registerUser } from "./handlers/user.handlers";
-import { createNewTask, deleteTask, toggleTaskCompleted } from "./handlers/task.handlers";
+import { getAllUsers, loginUser, registerUser, verifyToken } from "./handlers/user.handlers";
+import {
+  createNewTask,
+  deleteTask,
+  getAllTasks,
+  toggleTaskCompleted,
+} from "./handlers/task.handlers";
 
 export async function appRoutes(app: FastifyInstance) {
   app.get("/home", async () => getAllTasks());
@@ -12,14 +16,14 @@ export async function appRoutes(app: FastifyInstance) {
 
   app.delete("/delete", async (request) => deleteTask(request));
 
-  // ROTAS DE USUÁRIOS
+  // User Routes
   app.get("/users", async (request) => getAllUsers(request));
 
   app.post("/login", async (request, reply) => loginUser(app, request, reply));
 
-  app.post("/register", async (request, reply) =>
-    registerUser(app, request, reply)
-  );
+  app.post("/register", async (request, reply) => registerUser(app, request));
+
+  app.post("/user/authenticate", async (request, reply) => verifyToken(request, reply))
 }
 
 ///// TODO - Post a habit

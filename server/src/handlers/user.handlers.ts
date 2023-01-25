@@ -2,13 +2,18 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 import { prisma } from "../lib/prisma";
 import { FastifyInstance } from "fastify";
+import { send } from "process";
 
 export const getAllUsers = async (request: FastifyRequest) => {
   const users = await prisma.user.findMany({});
   return users;
 };
 
-export const loginUser = async (app: FastifyInstance, request: FastifyRequest, reply: FastifyReply) => {
+export const loginUser = async (
+  app: FastifyInstance,
+  request: FastifyRequest,
+  reply: FastifyReply
+) => {
   const loginUserInfos = z.object({
     username: z.string(),
     password: z.string(),
@@ -42,7 +47,10 @@ export const loginUser = async (app: FastifyInstance, request: FastifyRequest, r
   }
 };
 
-export const registerUser = async (app: FastifyInstance, request: FastifyRequest, reply: FastifyReply) => {
+export const registerUser = async (
+  app: FastifyInstance,
+  request: FastifyRequest
+) => {
   const userRegisterInfos = z.object({
     user: z.string(),
     email: z.string(),
@@ -60,4 +68,13 @@ export const registerUser = async (app: FastifyInstance, request: FastifyRequest
       password: hashedPassword,
     },
   });
-}
+};
+
+export const verifyToken = async (request: FastifyRequest, reply: FastifyReply) => {
+  try {
+    reply.send({ message: "Token válido" });
+  } catch (error) {
+    console.log(error);
+    reply.send({ message: "Token inválido" }).code(401);
+  }
+};

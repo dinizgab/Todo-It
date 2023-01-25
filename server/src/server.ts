@@ -12,9 +12,24 @@ app.register(cors);
 app.register(bcrypt);
 app.register(fastifyJwt, {
   secret: process.env.JWT_SECRET!,
+  verify: {
+    extractToken: (req) => {
+      //@ts-ignore
+      const token: string = req.headers.token;
+      return token;
+    },
+  },
 });
 
 app.register(appRoutes);
+
+app.addHook("onRequest", async (request, reply) => {
+  try {
+    await request.jwtVerify();
+  } catch (err) {
+    reply.send(err);
+  }
+});
 
 app.listen({ port: 3333 }, (error, address) => {
   if (error) {
