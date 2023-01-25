@@ -1,6 +1,7 @@
 import { prisma } from "./lib/prisma";
 import { FastifyInstance } from "fastify";
-import { z } from "zod";
+import { isValid, z } from "zod";
+import { REPL_MODE_SLOPPY } from "repl";
 
 export async function appRoutes(app: FastifyInstance) {
   app.get("/home", async (request) => {
@@ -66,6 +67,40 @@ export async function appRoutes(app: FastifyInstance) {
     });
   });
 
+  app.get("/users", async (request) => {
+    const users = await prisma.user.findMany({})
+    return users
+  })
+
+  app.post("/login", async (request, reply) => {
+    const loginUserInfos = z.object({
+      username: z.string(),
+      password: z.string(),
+    });
+
+    const { username, password } = loginUserInfos.parse(request.body);
+
+    const user = await prisma.user.findFirst({
+      where: {
+        user: username,
+      },
+    });
+
+    let isValidLogin = false;
+
+    if (user) {
+      isValidLogin = await app.bcrypt.compare(password, user.password);
+    } else {
+      reply.code(404).send({ message: "Usuario nao encontrado" });
+    }
+
+    if (isValidLogin) {
+      reply.code(200).send({ message: "Usuario logado: ", username });
+    } else {
+      reply.code(401).send({ message: "Usuario ou senha incorretos" });
+    }
+  });
+
   app.post("/register", async (request) => {
     const userRegisterInfos = z.object({
       user: z.string(),
@@ -87,9 +122,9 @@ export async function appRoutes(app: FastifyInstance) {
   });
 }
 
-//// Post a habit
-//// Get all habits to list them
-//// Patch a specific habit (Toggle if is completed or not)
-//// Delete a task
+///// TODO - Post a habit
+///// TODO - Get all habits to list them
+///// TODO - Patch a specific habit (Toggle if is completed or not)
+///// TODO - Delete a task
 // TODO - Login de usuário
-// TODO - Cadastro de usuário
+///// TODO - Cadastro de usuário
