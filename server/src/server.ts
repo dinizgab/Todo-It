@@ -23,8 +23,9 @@ app.register(fastifyJwt, {
 
 app.register(appRoutes);
 
+const enteringRoutes = ["/register", "/login"];
 app.addHook("onRequest", async (request, reply) => {
-  if (request.routerPath !== "/register") {
+  if (!enteringRoutes.includes(request.routerPath)) {
     try {
       await request.jwtVerify();
     } catch (err) {

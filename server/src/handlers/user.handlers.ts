@@ -3,7 +3,7 @@ import { z } from "zod";
 import { prisma } from "../lib/prisma";
 import { FastifyInstance } from "fastify";
 
-export const getAllUsers = async (request: FastifyRequest) => {
+export const getAllUsers = async () => {
   const users = await prisma.user.findMany({});
   return users;
 };
@@ -69,7 +69,7 @@ export const registerUser = async (
     },
   });
 
-  const jwtToken = app.jwt.sign({ logedUser: user });
+  const jwtToken = app.jwt.sign({ logedUser: user }, { expiresIn: "1d" });
 
   reply.send({
     message: "Usuario logado",

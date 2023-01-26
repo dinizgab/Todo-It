@@ -12,7 +12,7 @@ import {
 } from "./handlers/task.handlers";
 
 export async function appRoutes(app: FastifyInstance) {
-  app.get("/home", async () => getAllTasks());
+  app.get("/home", async (request) => getAllTasks());
 
   app.post("/create", async (request) => createNewTask(request));
 
@@ -21,7 +21,7 @@ export async function appRoutes(app: FastifyInstance) {
   app.delete("/delete", async (request) => deleteTask(request));
 
   // User Routes
-  app.get("/users", async (request) => getAllUsers(request));
+  app.get("/users", async (request) => getAllUsers());
 
   app.post("/login", async (request, reply) => loginUser(app, request, reply));
 
@@ -34,7 +34,7 @@ export async function appRoutes(app: FastifyInstance) {
 ///// TODO - Get all habits to list them
 ///// TODO - Patch a specific habit (Toggle if is completed or not)
 ///// TODO - Delete a task
-// TODO - Login de usuário
-///// TODO - Cadastro de usuário
-// TODO - Autorização do usuário com JWT quando se registrar o usuário
-// TODO - Autorização do usuário com JWT
+///// TODO - User login
+///// TODO - User registration
+///// TODO - User Auth when create a new user
+///// TODO - User Auth with JWT
