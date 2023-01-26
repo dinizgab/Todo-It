@@ -1,11 +1,16 @@
-import { FormEvent, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { createContext, FormEvent, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { api } from "../lib/axios";
 
 export default function LoginScreen() {
+  const navigate = useNavigate();
+
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [authToken, setAuthToken] = useState<string>("");
+
+  const authTokenContext = createContext("")
+
 
   async function handleUserLogin(event: FormEvent) {
     event.preventDefault();
@@ -14,13 +19,14 @@ export default function LoginScreen() {
         username,
         password,
       })
-      .then(({ data }) => setAuthToken(data.token))
-      .then(() => {
-        authToken ? <Navigate to="/home" /> : null;
-      });
+      .then(({ data }) => setAuthToken(data.token));
+
+    if (authToken) {
+      authTokenContext
+      navigate("/home");
+    }
   }
 
-  console.log(authToken);
   return (
     <div className="w-screen h-screen bg-background flex flex-col items-center justify-center gap-3 text-white">
       <h1 className="text-5xl font-bold m-4">Tasklist</h1>
@@ -70,8 +76,6 @@ export default function LoginScreen() {
             Clique aqui!
           </Link>
         </span>
-
-        {authToken && <Navigate to="/home" />}
       </form>
     </div>
   );

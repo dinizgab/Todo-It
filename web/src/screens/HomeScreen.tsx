@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 import Header from "../components/Header";
 import Task from "../components/Task";
@@ -16,7 +17,7 @@ export default function HomeScreen() {
   const [tasks, setTasks] = useState<Task[]>([]);
 
   async function handleTaskDelete(id: string) {
-    await api.delete("/delete", {
+  await api.delete("/delete", {
       params: {
         taskId: id,
       },
@@ -31,7 +32,11 @@ export default function HomeScreen() {
   }
 
   useEffect(() => {
-    api.get("/home").then((res) => setTasks(res.data));
+    api.get("/home", {
+      headers: {
+        token: 
+      }
+    }).then((res) => setTasks(res.data));
   }, []);
 
   return (
