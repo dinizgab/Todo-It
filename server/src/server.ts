@@ -24,10 +24,12 @@ app.register(fastifyJwt, {
 app.register(appRoutes);
 
 app.addHook("onRequest", async (request, reply) => {
-  try {
-    await request.jwtVerify();
-  } catch (err) {
-    reply.send(err);
+  if (request.routerPath !== "/register") {
+    try {
+      await request.jwtVerify();
+    } catch (err) {
+      reply.send(err);
+    }
   }
 });
 

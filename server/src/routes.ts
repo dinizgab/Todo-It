@@ -1,5 +1,9 @@
 import { FastifyInstance } from "fastify";
-import { getAllUsers, loginUser, registerUser, verifyToken } from "./handlers/user.handlers";
+import {
+  getAllUsers,
+  loginUser,
+  registerUser,
+} from "./handlers/user.handlers";
 import {
   createNewTask,
   deleteTask,
@@ -21,9 +25,9 @@ export async function appRoutes(app: FastifyInstance) {
 
   app.post("/login", async (request, reply) => loginUser(app, request, reply));
 
-  app.post("/register", async (request, reply) => registerUser(app, request));
-
-  app.post("/user/authenticate", async (request, reply) => verifyToken(request, reply))
+  app.post("/register", async (request, reply) =>
+    registerUser(app, request, reply)
+  );
 }
 
 ///// TODO - Post a habit
