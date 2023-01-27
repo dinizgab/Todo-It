@@ -1,20 +1,31 @@
 import { Check } from "phosphor-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { api } from "../lib/axios";
+import { AuthContext } from "../providers/AuthProvider";
 
 export default function NewTaskForm() {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
+
+  const { authToken } = useContext(AuthContext);
 
   async function createNewHabit() {
     if (!title.trim() || !description.trim()) {
       return;
     }
 
-    await api.post("/create", {
-      title,
-      description,
-    });
+    await api.post(
+      "/create",
+      {
+        title,
+        description,
+      },
+      {
+        headers: {
+          token: authToken,
+        },
+      }
+    );
 
     setTitle("");
     setDescription("");

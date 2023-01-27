@@ -19,17 +19,33 @@ export default function HomeScreen() {
 
   async function handleTaskDelete(id: string) {
     await api.delete("/delete", {
+      headers: {
+        token: authToken,
+      },
+
       params: {
         taskId: id,
       },
     });
-
     setTasks(tasks.filter((task) => task.id !== id));
   }
 
   async function handleTaskToggle(id: string) {
-    await api.patch(`/${id}/toggle`);
-    await api.get("/home").then((res) => setTasks(res.data));
+    console
+    await api.patch(`/${id}/toggle`, {
+      headers: {
+        token: authToken,
+      },
+    });
+
+    await api
+      .get("/home", {
+        headers: {
+          token: authToken,
+        },
+      })
+      .then((res) => setTasks(res.data));
+    console.log(authToken);
   }
 
   useEffect(() => {
@@ -41,7 +57,7 @@ export default function HomeScreen() {
       })
       .then((res) => setTasks(res.data));
 
-    console.log(authToken);
+      console.log(authToken)
   }, []);
 
   return (

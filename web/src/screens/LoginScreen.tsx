@@ -1,4 +1,10 @@
-import { createContext, FormEvent, useContext, useState } from "react";
+import {
+  createContext,
+  FormEvent,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../lib/axios";
 import { AuthContext } from "../providers/AuthProvider";
@@ -20,16 +26,18 @@ export default function LoginScreen() {
       })
       .then(({ data }) => {
         setAuthToken(data.token);
-        if (authToken) {
-          navigate("/home");
-        }
       });
-
   }
+
+  useEffect(() => {
+    if (authToken) {
+      navigate("/home");
+    }
+  }, [authToken]);
 
   return (
     <div className="w-screen h-screen bg-background flex flex-col items-center justify-center gap-3 text-white">
-      <h1 className="text-5xl font-bold m-4">Tasklist</h1>
+      <h1 className="text-5xl font-bold m-4">ToDoish</h1>
       <form
         action=""
         onSubmit={(event) => handleUserLogin(event)}
