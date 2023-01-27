@@ -3,6 +3,7 @@ import {
   getAllUsers,
   loginUser,
   registerUser,
+  revalidateAccessToken,
 } from "./handlers/user.handlers";
 import {
   createNewTask,
@@ -28,6 +29,8 @@ export async function appRoutes(app: FastifyInstance) {
   app.post("/register", async (request, reply) =>
     registerUser(app, request, reply)
   );
+
+  app.post("/revalidate", async (request, reply) => revalidateAccessToken(app, request, reply))
 }
 
 ///// TODO - Post a habit

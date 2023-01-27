@@ -26,20 +26,17 @@ export const loginUser = async (
     },
   });
 
-  let isValidLogin = false;
-  if (user) {
-    isValidLogin = await app.bcrypt.compare(password, user.password);
-  } else {
-    reply.code(404).send({ message: "Usuario nao encontrado" });
-  }
+  console.log(user);
 
-  const jwtToken = app.jwt.sign({ logedUser: username });
+  if (user && (await app.bcrypt.compare(password, user.password))) {
+    const accessToken = app.jwt.sign({ logedUser: username, sub: user!.id });
+    const refreshToken = app.jwt.sign({ sub: user!.id });
 
-  if (isValidLogin) {
     reply.send({
       message: "Usuario logado",
       user: username,
-      token: jwtToken,
+      accessToken,
+      refreshToken,
     });
   } else {
     reply.code(401).send({ message: "Usuario ou senha incorretos" });
@@ -69,11 +66,23 @@ export const registerUser = async (
     },
   });
 
-  const jwtToken = app.jwt.sign({ logedUser: user }, { expiresIn: "1d" });
+  const accessToken = app.jwt.sign({ logedUser: user });
 
   reply.send({
     message: "Usuario logado",
     user: user,
-    token: jwtToken,
+    accessToken: accessToken,
   });
+};
+
+export const revalidateAccessToken = (
+  app: FastifyInstance,
+  request: FastifyRequest,
+  reply: FastifyReply
+) => {
+  const refreshTokenInfos = z.object({
+    refreshToken: z.string(),
+  });
+
+  const { refreshToken } = refreshTokenInfos.parse(request.body);
 };
