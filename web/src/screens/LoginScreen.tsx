@@ -1,16 +1,15 @@
-import { createContext, FormEvent, useState } from "react";
+import { createContext, FormEvent, useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../lib/axios";
+import { AuthContext } from "../providers/AuthProvider";
 
 export default function LoginScreen() {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [authToken, setAuthToken] = useState<string>("");
 
-  const authTokenContext = createContext("")
-
+  const { authToken, setAuthToken } = useContext(AuthContext);
 
   async function handleUserLogin(event: FormEvent) {
     event.preventDefault();
@@ -19,12 +18,13 @@ export default function LoginScreen() {
         username,
         password,
       })
-      .then(({ data }) => setAuthToken(data.token));
+      .then(({ data }) => {
+        setAuthToken(data.token);
+        if (authToken) {
+          navigate("/home");
+        }
+      });
 
-    if (authToken) {
-      authTokenContext
-      navigate("/home");
-    }
   }
 
   return (

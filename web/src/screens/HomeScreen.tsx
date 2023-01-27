@@ -1,10 +1,10 @@
 import clsx from "clsx";
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 
 import Header from "../components/Header";
 import Task from "../components/Task";
 import { api } from "../lib/axios";
+import { AuthContext } from "../providers/AuthProvider";
 
 type Task = {
   id: string;
@@ -15,9 +15,10 @@ type Task = {
 
 export default function HomeScreen() {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const { authToken } = useContext(AuthContext);
 
   async function handleTaskDelete(id: string) {
-  await api.delete("/delete", {
+    await api.delete("/delete", {
       params: {
         taskId: id,
       },
@@ -32,11 +33,15 @@ export default function HomeScreen() {
   }
 
   useEffect(() => {
-    api.get("/home", {
-      headers: {
-        token: 
-      }
-    }).then((res) => setTasks(res.data));
+    api
+      .get("/home", {
+        headers: {
+          token: authToken,
+        },
+      })
+      .then((res) => setTasks(res.data));
+
+    console.log(authToken);
   }, []);
 
   return (
