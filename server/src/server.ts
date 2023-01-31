@@ -41,7 +41,7 @@ app.addHook("onRequest", async (request, reply) => {
   if (!enteringRoutes.includes(request.routerPath)) {
     try {
       await request.jwtVerify();
-      
+
     } catch (err) {
       const renewedRefreshToken = app.jwt.sign({ });
       const renewedAccessToken = app.jwt.sign({ });
@@ -51,6 +51,7 @@ app.addHook("onRequest", async (request, reply) => {
         httpOnly: true,
         path: "/"
       })
+      
       reply.send(renewedAccessToken);
     }
   }

@@ -15,7 +15,7 @@ type Task = {
 
 export default function HomeScreen() {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const { accessToken } = useContext(AuthContext);
+  const { accessToken, setAccessToken } = useContext(AuthContext);
 
   async function handleTaskDelete(id: string) {
     await api.delete("/delete", {
@@ -31,7 +31,7 @@ export default function HomeScreen() {
   }
 
   async function handleTaskToggle(id: string) {
-    console
+    console;
     await api.patch(`/${id}/toggle`, {
       headers: {
         token: accessToken,
@@ -54,9 +54,10 @@ export default function HomeScreen() {
           token: accessToken,
         },
       })
-      .then((res) => setTasks(res.data));
-
-      console.log(accessToken)
+      .then((res) => {
+        setAccessToken(res.data.accessToken);
+        setTasks(res.data);
+      });
   }, []);
 
   return (
