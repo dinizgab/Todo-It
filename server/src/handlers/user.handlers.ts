@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { z } from "zod";
+import { date, z } from "zod";
 import { prisma } from "../lib/prisma";
 import { FastifyInstance } from "fastify";
 
@@ -26,17 +26,17 @@ export const loginUser = async (
     },
   });
 
-  console.log(user);
-
   if (user && (await app.bcrypt.compare(password, user.password))) {
     const accessToken = app.jwt.sign({ logedUser: username, sub: user!.id });
     const refreshToken = app.jwt.sign({ sub: user!.id });
+
+    // TODO - Adicionar tempo de expiração no cookie
+    reply.setCookie("refreshToken", refreshToken);
 
     reply.send({
       message: "Usuario logado",
       user: username,
       accessToken,
-      refreshToken,
     });
   } else {
     reply.code(401).send({ message: "Usuario ou senha incorretos" });
