@@ -1,10 +1,4 @@
-import {
-  createContext,
-  FormEvent,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { FormEvent, useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../lib/axios";
 import { AuthContext } from "../providers/AuthProvider";
@@ -15,29 +9,33 @@ export default function LoginScreen() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const { authToken, setAuthToken } = useContext(AuthContext);
+  const { accessToken, setAccessToken } = useContext(AuthContext);
 
   async function handleUserLogin(event: FormEvent) {
     event.preventDefault();
     await api
-      .post("/login", {
-        username,
-        password,
-      })
-      .then(({ data }) => {
-        setAuthToken(data.token);
+      .post(
+        "/login",
+        {
+          username,
+          password,
+          
+        },
+      )
+      .then((res) => {
+        setAccessToken(res.data.accessToken);
       });
   }
 
   useEffect(() => {
-    if (authToken) {
+    if (accessToken) {
       navigate("/home");
     }
-  }, [authToken]);
+  }, [accessToken]);
 
   return (
     <div className="w-screen h-screen bg-background flex flex-col items-center justify-center gap-3 text-white">
-      <h1 className="text-5xl font-bold m-4">ToDoish</h1>
+      <h1 className="text-5xl font-bold m-4">ToDo-it</h1>
       <form
         action=""
         onSubmit={(event) => handleUserLogin(event)}
