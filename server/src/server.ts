@@ -37,11 +37,10 @@ app.register(appRoutes);
 
 const enteringRoutes = ["/register", "/login"];
 app.addHook("onRequest", async (request, reply) => {
-  // TODO - Put the refresh token verification here
   if (!enteringRoutes.includes(request.routerPath)) {
     try {
       await request.jwtVerify();
-
+      
     } catch (err) {
       const renewedRefreshToken = app.jwt.sign({ });
       const renewedAccessToken = app.jwt.sign({ });

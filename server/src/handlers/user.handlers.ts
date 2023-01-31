@@ -47,7 +47,6 @@ export const loginUser = async (
   }
 };
 
-// TODO - Authenticate this route
 export const registerUser = async (
   app: FastifyInstance,
   request: FastifyRequest,
@@ -75,6 +74,6 @@ export const registerUser = async (
   reply.send({
     message: "Usuario logado",
     user: user,
-    accessToken: accessToken,
+    accessToken,
   });
 };

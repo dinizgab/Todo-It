@@ -1,21 +1,37 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { api } from "../lib/axios";
+import { AuthContext } from "../providers/AuthProvider";
 
 export default function RegisterScreen() {
-  const [user, setUser] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [user, setUser] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate()
+  const { accessToken, setAccessToken } = useContext(AuthContext);
 
   async function handleUserRegistration(event: FormEvent) {
-    event.preventDefault()
-    await api.post("/register", {
-      user, email, password
-    })
+    event.preventDefault();
+    await api
+      .post("/register", {
+        user,
+        email,
+        password,
+      })
+      .then(({ data }) => {
+        setAccessToken(data.accessToken);
+      });
 
-    setUser("")
-    setEmail("")
-    setPassword("")
+    setUser("");
+    setEmail("");
+    setPassword("");
   }
+
+  useEffect(() => {
+    if (accessToken) {
+      navigate("/home");
+    }
+  }, [accessToken]);
 
   return (
     <div className="w-screen h-screen bg-background flex flex-col items-center justify-center gap-3 text-white">
@@ -53,7 +69,6 @@ export default function RegisterScreen() {
           autoComplete="off"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
-
         />
 
         <label htmlFor="password" className="my-2">
@@ -66,7 +81,6 @@ export default function RegisterScreen() {
           placeholder="Senha"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-
         />
 
         <button
