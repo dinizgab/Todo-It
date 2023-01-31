@@ -30,8 +30,11 @@ export const loginUser = async (
     const accessToken = app.jwt.sign({ logedUser: username, sub: user!.id });
     const refreshToken = app.jwt.sign({ sub: user!.id });
 
-    // TODO - Adicionar tempo de expiração no cookie
-    reply.setCookie("refreshToken", refreshToken);
+    // TODO - Add cookie expiration time
+    reply.setCookie("refreshToken", refreshToken, {
+      secure: true,
+      httpOnly: true
+    });
 
     reply.send({
       message: "Usuario logado",

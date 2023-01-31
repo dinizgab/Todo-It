@@ -9,7 +9,11 @@ import { appRoutes } from "./routes";
 
 const app = fastify();
 
-app.register(cors);
+app.register(cors, {
+  origin: "http://localhost:5173",
+  credentials: true,
+});
+
 app.register(bcrypt);
 app.register(fastifyJwt, {
   secret: process.env.JWT_SECRET!,
@@ -23,15 +27,14 @@ app.register(fastifyJwt, {
 });
 app.register(fastifyCookie, {
   secret: process.env.COOKIE_SECRET!,
-})
-
+});
 
 app.register(appRoutes);
 
 const enteringRoutes = ["/register", "/login"];
 app.addHook("onRequest", async (request, reply) => {
   // TODO - Put the refresh token verification here
-  
+  console.log(request.headers.cookie)
   if (!enteringRoutes.includes(request.routerPath)) {
     try {
       await request.jwtVerify();
