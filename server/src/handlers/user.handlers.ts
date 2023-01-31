@@ -33,7 +33,8 @@ export const loginUser = async (
     // TODO - Add cookie expiration time
     reply.setCookie("refreshToken", refreshToken, {
       secure: true,
-      httpOnly: true
+      httpOnly: true,
+      path: "/"
     });
 
     reply.send({
@@ -46,6 +47,7 @@ export const loginUser = async (
   }
 };
 
+// TODO - Authenticate this route
 export const registerUser = async (
   app: FastifyInstance,
   request: FastifyRequest,
@@ -70,22 +72,9 @@ export const registerUser = async (
   });
 
   const accessToken = app.jwt.sign({ logedUser: user });
-
   reply.send({
     message: "Usuario logado",
     user: user,
     accessToken: accessToken,
   });
-};
-
-export const revalidateAccessToken = (
-  app: FastifyInstance,
-  request: FastifyRequest,
-  reply: FastifyReply
-) => {
-  const refreshTokenInfos = z.object({
-    refreshToken: z.string(),
-  });
-
-  const { refreshToken } = refreshTokenInfos.parse(request.body);
 };

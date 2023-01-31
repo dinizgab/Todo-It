@@ -17,13 +17,17 @@ app.register(cors, {
 app.register(bcrypt);
 app.register(fastifyJwt, {
   secret: process.env.JWT_SECRET!,
-  verify: {
+  /* verify: {
     extractToken: (req) => {
       //@ts-ignore
       const token: string = req.headers.token;
       return token;
     },
-  },
+  }, */
+  cookie: {
+    cookieName: "refreshToken",
+    signed: false,
+  }
 });
 app.register(fastifyCookie, {
   secret: process.env.COOKIE_SECRET!,
@@ -34,12 +38,20 @@ app.register(appRoutes);
 const enteringRoutes = ["/register", "/login"];
 app.addHook("onRequest", async (request, reply) => {
   // TODO - Put the refresh token verification here
-  console.log(request.headers.cookie)
   if (!enteringRoutes.includes(request.routerPath)) {
     try {
       await request.jwtVerify();
+      
     } catch (err) {
-      reply.send(err);
+      const renewedRefreshToken = app.jwt.sign({ });
+      const renewedAccessToken = app.jwt.sign({ });
+  
+      reply.setCookie("refreshToken", renewedRefreshToken, {
+        secure: true,
+        httpOnly: true,
+        path: "/"
+      })
+      reply.send(renewedAccessToken);
     }
   }
 });
