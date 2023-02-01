@@ -16,8 +16,8 @@ model Task {
   description String
   completed   Boolean @default(false)
 
-  createdBy String? @default(uuid())
-  User      User?   @relation(fields: [createdBy], references: [id])
+  createdBy String @default(uuid())
+  User      User   @relation(fields: [createdBy], references: [id])
 
   @@map("task")
 }
