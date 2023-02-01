@@ -7,22 +7,24 @@ export default function NewTaskForm() {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
 
-  const { authToken } = useContext(AuthContext);
+  const { accessToken } = useContext(AuthContext);
 
   async function createNewHabit() {
     if (!title.trim() || !description.trim()) {
       return;
     }
 
+    const userId = localStorage.getItem("loggedUserId")
     await api.post(
       "/create",
       {
+        createdBy: userId,
         title,
         description,
       },
       {
         headers: {
-          token: authToken,
+          token: accessToken,
         },
       }
     );

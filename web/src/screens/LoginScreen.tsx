@@ -14,16 +14,13 @@ export default function LoginScreen() {
   async function handleUserLogin(event: FormEvent) {
     event.preventDefault();
     await api
-      .post(
-        "/login",
-        {
-          username,
-          password,
-          
-        },
-      )
-      .then((res) => {
-        setAccessToken(res.data.accessToken);
+      .post("/login", {
+        username,
+        password,
+      })
+      .then(({ data }) => {
+        localStorage.setItem("loggedUserId", data.loggedUser);
+        setAccessToken(data.accessToken);
       });
   }
 

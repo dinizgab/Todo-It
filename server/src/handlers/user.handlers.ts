@@ -27,19 +27,19 @@ export const loginUser = async (
   });
 
   if (user && (await app.bcrypt.compare(password, user.password))) {
-    const accessToken = app.jwt.sign({ logedUser: username, sub: user!.id });
+    const accessToken = app.jwt.sign({ loggedUser: username, sub: user!.id });
     const refreshToken = app.jwt.sign({ sub: user!.id });
 
     // TODO - Add cookie expiration time
     reply.setCookie("refreshToken", refreshToken, {
       secure: true,
       httpOnly: true,
-      path: "/"
+      path: "/",
     });
 
     reply.send({
       message: "Usuario logado",
-      user: username,
+      loggedUser: user.id,
       accessToken,
     });
   } else {
@@ -53,27 +53,28 @@ export const registerUser = async (
   reply: FastifyReply
 ) => {
   const userRegisterInfos = z.object({
-    user: z.string(),
+    username: z.string(),
     email: z.string(),
     password: z.string(),
   });
 
-  const { user, email, password } = userRegisterInfos.parse(request.body);
+  const { username, email, password } = userRegisterInfos.parse(request.body);
 
   const hashedPassword = await app.bcrypt.hash(password);
 
-  await prisma.user.create({
+  const user = await prisma.user.create({
     data: {
-      user,
+      user: username,
       email,
       password: hashedPassword,
     },
   });
 
-  const accessToken = app.jwt.sign({ logedUser: user });
+  const accessToken = app.jwt.sign({ loggedUser: user });
+
   reply.send({
     message: "Usuario logado",
-    user: user,
+    loggedUser: user.id,
     accessToken,
   });
 };

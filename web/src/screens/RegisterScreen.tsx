@@ -14,11 +14,12 @@ export default function RegisterScreen() {
     event.preventDefault();
     await api
       .post("/register", {
-        user,
+        username: user,
         email,
         password,
       })
       .then(({ data }) => {
+        localStorage.setItem("loggedUser", data.loggedUser)
         setAccessToken(data.accessToken);
       });
 

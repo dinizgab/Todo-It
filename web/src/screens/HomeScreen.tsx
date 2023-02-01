@@ -31,7 +31,7 @@ export default function HomeScreen() {
   }
 
   async function handleTaskToggle(id: string) {
-    console;
+    const loggedUserId = localStorage.getItem("loggedUserId");
     await api.patch(`/${id}/toggle`, {
       headers: {
         token: accessToken,
@@ -43,20 +43,27 @@ export default function HomeScreen() {
         headers: {
           token: accessToken,
         },
+        params: {
+          userId: loggedUserId,
+        },
       })
-      .then((res) => setTasks(res.data));
+      .then(({ data }) => setTasks(data));
   }
 
   useEffect(() => {
+    const loggedUserId = localStorage.getItem("loggedUserId");
     api
       .get("/home", {
         headers: {
           token: accessToken,
         },
+        params: {
+          userId: loggedUserId,
+        },
       })
-      .then((res) => {
-        setAccessToken(res.data.accessToken);
-        setTasks(res.data);
+      .then(({ data }) => {
+        setAccessToken(data.accessToken);
+        setTasks(data);
       });
   }, []);
 
