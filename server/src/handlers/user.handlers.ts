@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { date, z } from "zod";
+import { z } from "zod";
 import { prisma } from "../lib/prisma";
 import { FastifyInstance } from "fastify";
 

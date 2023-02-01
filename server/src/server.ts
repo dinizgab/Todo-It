@@ -17,13 +17,6 @@ app.register(cors, {
 app.register(bcrypt);
 app.register(fastifyJwt, {
   secret: process.env.JWT_SECRET!,
-  /* verify: {
-    extractToken: (req) => {
-      //@ts-ignore
-      const token: string = req.headers.token;
-      return token;
-    },
-  }, */
   cookie: {
     cookieName: "refreshToken",
     signed: false,

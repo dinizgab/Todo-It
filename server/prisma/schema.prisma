@@ -16,14 +16,18 @@ model Task {
   description String
   completed   Boolean @default(false)
 
+  createdBy String? @default(uuid())
+  User      User?   @relation(fields: [createdBy], references: [id])
+
   @@map("task")
 }
 
 model User {
-  id    String @id @default(uuid())
-  user  String
-  email String
+  id       String @id @default(uuid())
+  user     String
+  email    String
   password String
+  tasks    Task[]
 
   @@map("user")
 }
