@@ -19,7 +19,6 @@ const router = createBrowserRouter([
     element: <RegisterScreen />,
   },
   {
-    // TODO - Página protegida por autenticação JWT
     path: "/home",
     element: <HomeScreen />,
   },

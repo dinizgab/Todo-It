@@ -31,12 +31,12 @@ export default function LoginScreen() {
   }, [accessToken]);
 
   return (
-    <div className="w-screen h-screen bg-background flex flex-col items-center justify-center gap-3 text-white">
+    <div className="w-screen h-screen bg-background flex flex-col items-center justify-center text-white">
       <h1 className="text-5xl font-bold m-4">ToDo-it</h1>
       <form
         action=""
         onSubmit={(event) => handleUserLogin(event)}
-        className="flex flex-col justify-center bg-zinc-900 h-[45%] w-1/4 rounded-lg p-10 shadow-lg shadow-violet-800"
+        className="flex flex-col bg-zinc-900 max-h-1/2 max-w-2/3 rounded-lg mx-4 p-10 shadow-lg shadow-violet-800"
       >
         <h1 className="my-4 text-3xl font-bold text-center">Faça seu login</h1>
 

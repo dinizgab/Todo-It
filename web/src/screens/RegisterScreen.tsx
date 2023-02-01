@@ -7,7 +7,7 @@ export default function RegisterScreen() {
   const [user, setUser] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { accessToken, setAccessToken } = useContext(AuthContext);
 
   async function handleUserRegistration(event: FormEvent) {
@@ -19,13 +19,9 @@ export default function RegisterScreen() {
         password,
       })
       .then(({ data }) => {
-        localStorage.setItem("loggedUser", data.loggedUser)
+        localStorage.setItem("loggedUser", data.loggedUser);
         setAccessToken(data.accessToken);
       });
-
-    setUser("");
-    setEmail("");
-    setPassword("");
   }
 
   useEffect(() => {
@@ -36,13 +32,13 @@ export default function RegisterScreen() {
 
   return (
     <div className="w-screen h-screen bg-background flex flex-col items-center justify-center gap-3 text-white">
-      <h1 className="text-5xl font-bold m-4">Tasklist</h1>
+      <h1 className="text-5xl font-bold">ToDo-It</h1>
       <form
         action=""
         onSubmit={handleUserRegistration}
-        className="flex flex-col justify-center bg-zinc-900 h-1/2 w-1/4 rounded-lg p-10 shadow-lg shadow-violet-800"
+        className="flex flex-col justify-center bg-zinc-900 max-w-2/3 rounded-lg p-10 shadow-lg shadow-violet-800"
       >
-        <h1 className="my-4 text-3xl font-bold text-center">
+        <h1 className="text-3xl font-bold text-center">
           Crie a sua conta!
         </h1>
 
