@@ -8,6 +8,7 @@ import fastifyCookie from "@fastify/cookie";
 import { appRoutes } from "./routes";
 
 const app = fastify();
+const PORT = process.env.PORT! || 3333
 
 app.register(cors, {
   origin: "*",
@@ -49,7 +50,8 @@ app.addHook("onRequest", async (request, reply) => {
   }
 });
 
-app.listen({ port: 3333 }, (error, address) => {
+// @ts-ignore
+app.listen({ port: PORT }, (error, address) => {
   if (error) {
     console.log(error);
     process.exit(1);
