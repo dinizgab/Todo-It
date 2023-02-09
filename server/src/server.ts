@@ -51,7 +51,7 @@ app.addHook("onRequest", async (request, reply) => {
 });
 
 // @ts-ignore
-app.listen({ port: PORT, host: '0.0.0.0' }, (error, address) => {
+app.listen({ port: PORT }, (error, address) => {
   if (error) {
     console.log(error);
     process.exit(1);

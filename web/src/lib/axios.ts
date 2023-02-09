@@ -1,6 +1,6 @@
 import axios from "axios";
 
 export const api = axios.create({
-    baseURL: "todo-it-backend.up.railway.app",
+    baseURL: "http://localhost:3333",
     withCredentials: true
 })
